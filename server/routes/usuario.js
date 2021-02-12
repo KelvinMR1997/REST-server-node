@@ -2,10 +2,14 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
+const {
+  verficarToken,
+  verficarAdminRole,
+} = require("../middlewares/autenticacion");
 
 const app = express();
 
-app.get("/usuario", function (req, res) {
+app.get("/usuario", verficarToken, (req, res) => {
   // Modelo.find() encuentra todos los registros de la colección , y el execute sirve para ejecutar
   // Skip salta según la numeracion que reciba el parentecis, limit limita según el arg entre parentesis
   //  el objeto req, recibe los parametros por le usuario
@@ -36,7 +40,7 @@ app.get("/usuario", function (req, res) {
     });
 });
 
-app.post("/usuario", function (req, res) {
+app.post("/usuario", [verficarToken, verficarAdminRole], (req, res) => {
   let body = req.body;
   let usuario = new Usuario({
     nombre: body.nombre,
@@ -59,7 +63,7 @@ app.post("/usuario", function (req, res) {
   });
 });
 
-app.put("/usuario/:id", function (req, res) {
+app.put("/usuario/:id", [verficarToken, verficarAdminRole], (req, res) => {
   let id = req.params.id;
   let body = _.pick(req.body, ["nombre", "email", "img", "role", "estado"]);
 
@@ -92,7 +96,7 @@ app.put("/usuario/:id", function (req, res) {
   );
 });
 // ======================ELIMINAR USUARIO MENDIANTE EL CAMBIO DE ESTADO==================
-app.delete("/usuario/:id", function (req, res) {
+app.delete("/usuario/:id", [verficarToken, verficarAdminRole], (req, res) => {
   let id = req.params.id;
   let cambiarEstado = {
     estado: false,
