@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcrypt"); 
+const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
 const {
@@ -10,7 +10,7 @@ const {
 const app = express();
 
 app.get("/usuario", verficarToken, (req, res) => {
-  // Modelo.find() encuentra todos los registros de la colección , y el execute sirve para ejecutar
+  // Modelo.find() encuentra todos los registros de la colección , y el exec sirve para ejecutar
   // Skip salta según la numeracion que reciba el parentecis, limit limita según el arg entre parentesis
   //  el objeto req, recibe los parametros por le usuario
 
@@ -42,6 +42,7 @@ app.get("/usuario", verficarToken, (req, res) => {
 
 app.post("/usuario", [verficarToken, verficarAdminRole], (req, res) => {
   let body = req.body;
+  
   let usuario = new Usuario({
     nombre: body.nombre,
     email: body.email,
