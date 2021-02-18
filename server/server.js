@@ -5,6 +5,22 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const bodyParser = require("body-parser");
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use((error, req, res, next) => {
+  if (error instanceof SyntaxError) {
+    //Handle SyntaxError here.
+    return res.status(400).json({
+      error: {
+        ok: false,
+        message: `Escriba formato valido, no sea imbecil, ${error.body.split('"')} no es un formato valido`,
+      },
+    });
+  }
+  next();
+});
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json

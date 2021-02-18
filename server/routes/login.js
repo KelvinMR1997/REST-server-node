@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
+const nodemailer = require("nodemailer");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const Usuario = require("../models/usuario");
@@ -129,9 +130,35 @@ app.post("/google", async (req, res) => {
     }
   });
 
-  // res.json({
-  //   usuario: googleUser,
-  // });
+  // Main nodemailer
+  async function main() {
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      // host: "smtp.gmail.com",
+      // port: 465,
+      // auth: {
+      //   user: "example@gmail.com",
+      //   pass: "example",
+      // },
+
+      host: "smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: "01b38c502b77e1",
+        pass: "20d4808c003d00",
+      },
+    });
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Fred Foo 👻" <foo@example.com>', // sender address
+      to: googleUser.email, // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
 });
 
 module.exports = app;
