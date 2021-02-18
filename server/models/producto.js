@@ -10,7 +10,8 @@ let productoSchema = new Schema({
   descripcion: { type: String, required: false },
   disponible: { type: Boolean, required: true, default: true },
   categoria: { type: Schema.Types.ObjectId, ref: "Categoria", required: true },
-  usuario: { type: Schema.Types.ObjectId, ref: "Usuario" },
+  usuario: { type: Schema.Types.ObjectId, ref: "Usuario", required: false },
+  img: { type: String },
 });
 
 module.exports = mongoose.model("Producto", productoSchema);
