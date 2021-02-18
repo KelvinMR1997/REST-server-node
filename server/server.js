@@ -14,7 +14,7 @@ app.use((error, req, res, next) => {
     return res.status(400).json({
       error: {
         ok: false,
-        message: `Escriba formato valido, no sea imbecil, ${error.body.split('"')} no es un formato valido`,
+        message: `Escriba formato valido, ${error.body.split('"')} no es un formato valido`,
       },
     });
   }
